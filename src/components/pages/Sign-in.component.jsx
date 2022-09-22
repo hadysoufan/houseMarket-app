@@ -1,27 +1,29 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { ReactComponent as ArrowRightIcon } from "../../assets/svg/keyboardArrowRightIcon.svg";
-import VisibilityIcon from "../../assets/svg/visibilityIcon.svg";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { toast } from 'react-toastify';
+import { ReactComponent as ArrowRightIcon } from '../../assets/svg/keyboardArrowRightIcon.svg';
+import VisibilityIcon from '../../assets/svg/visibilityIcon.svg';
+import OAuth from '../OAuth.component';
 
 function SignIn() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
   });
   const { email, password } = formData;
 
   const navigate = useNavigate();
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
+  const onChange = e => {
+    setFormData(prevState => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }));
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async e => {
     e.preventDefault();
 
     try {
@@ -34,10 +36,11 @@ function SignIn() {
       );
 
       if (userCredential.user) {
-        navigate("/");
+        toast.success('Sign In Success');
+        navigate('/');
       }
     } catch (error) {
-      console.log(error);
+      toast.error('Bad user Credentials');
     }
   };
 
@@ -60,7 +63,7 @@ function SignIn() {
 
             <div className="passwordInputDiv">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 className="passwordInput"
                 placeholder="Password"
                 value={password}
@@ -72,7 +75,7 @@ function SignIn() {
                 src={VisibilityIcon}
                 alt="show password"
                 className="showPassword"
-                onClick={() => setShowPassword((prevState) => !prevState)}
+                onClick={() => setShowPassword(prevState => !prevState)}
               />
             </div>
 
@@ -90,6 +93,7 @@ function SignIn() {
         </main>
 
         {/* Google OAuth component */}
+        <OAuth />
 
         <Link to="/sign-up" className="registerLink">
           Sign Up Instead

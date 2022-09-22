@@ -1,34 +1,37 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   getAuth,
   createUserWithEmailAndPassword,
   updateProfile,
-} from "firebase/auth";
-import { db } from "../../utils/firebase.utils";
-import { setDoc, doc, serverTimestamp } from "firebase/firestore";
-import { ReactComponent as ArrowRightIcon } from "../../assets/svg/keyboardArrowRightIcon.svg";
-import VisibilityIcon from "../../assets/svg/visibilityIcon.svg";
+} from 'firebase/auth';
+import { db } from '../../utils/firebase.utils';
+import { setDoc, doc, serverTimestamp } from 'firebase/firestore';
+import { toast } from 'react-toastify';
+import { ReactComponent as ArrowRightIcon } from '../../assets/svg/keyboardArrowRightIcon.svg';
+import VisibilityIcon from '../../assets/svg/visibilityIcon.svg';
+import OAuth from '../OAuth.component';
+
 
 function SignUp() {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    password: "",
+    name: '',
+    email: '',
+    password: '',
   });
   const { name, email, password } = formData;
 
   const navigate = useNavigate();
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
+  const onChange = e => {
+    setFormData(prevState => ({
       ...prevState,
       [e.target.id]: e.target.value,
     }));
   };
 
-  const onSubmit = async (e) => {
+  const onSubmit = async e => {
     e.preventDefault();
 
     try {
@@ -50,11 +53,12 @@ function SignUp() {
       // delete formDataCopy.password;
       formDataCopy.createdAt = serverTimestamp();
 
-      await setDoc(doc(db, "users", user.uid), formDataCopy);
+      await setDoc(doc(db, 'users', user.uid), formDataCopy);
 
-      navigate("/");
+      toast.success('Sign Up Success');
+      navigate('/');
     } catch (error) {
-      console.log(error);
+      toast.error('Some thing went wrong with registration');
     }
   };
 
@@ -85,7 +89,7 @@ function SignUp() {
 
             <div className="passwordInputDiv">
               <input
-                type={showPassword ? "text" : "password"}
+                type={showPassword ? 'text' : 'password'}
                 className="passwordInput"
                 placeholder="Password"
                 value={password}
@@ -97,7 +101,7 @@ function SignUp() {
                 src={VisibilityIcon}
                 alt="show password"
                 className="showPassword"
-                onClick={() => setShowPassword((prevState) => !prevState)}
+                onClick={() => setShowPassword(prevState => !prevState)}
               />
             </div>
 
@@ -115,6 +119,7 @@ function SignUp() {
         </main>
 
         {/* Google OAuth component */}
+        <OAuth />
 
         <Link to="/sign-in" className="registerLink">
           Sign In Instead
