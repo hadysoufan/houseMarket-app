@@ -15,10 +15,10 @@ function ListingItem({ listing, id, onDelete }) {
           alt={listing.name}
           className="categoryListingImg"
         />
+
         <div className="categoryListingDetails">
           <p className="categoryListingLocation">{listing.location}</p>
           <p className="categoryListingName">{listing.name}</p>
-
           <p className="categoryListingPrice">
             $
             {listing.offer
@@ -30,6 +30,7 @@ function ListingItem({ listing, id, onDelete }) {
                   .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
             {listing.type === 'rent' && ' / Month'}
           </p>
+
           <div className="categoryListingInfoDiv">
             <img src={bedIcon} alt="bed" />
             <p className="categoryListingInfoText">
@@ -37,7 +38,8 @@ function ListingItem({ listing, id, onDelete }) {
                 ? `${listing.bedrooms} Bedrooms`
                 : '1 Bedroom'}
             </p>
-            <img src={bathtubIcon} alt="bath" />
+
+            <img src={bathtubIcon} alt="bath tub" />
             <p className="categoryListingInfoText">
               {listing.bathrooms > 1
                 ? `${listing.bathrooms} Bathrooms`
@@ -50,12 +52,12 @@ function ListingItem({ listing, id, onDelete }) {
       {onDelete && (
         <DeleteIcon
           className="removeIcon"
-          fill="rgb(231, 76,60)"
-          onClick={() => onDelete(listing.id, listing.name)}
+          fill="rgb(231, 76, 60)"
+          onClick={() => {
+            onDelete(listing.id, listing.name);
+          }}
         />
       )}
-
-      {/* {onEdit && <EditIcon className="editIcon" onClick={() => onEdit(id)} />} */}
     </li>
   );
 }

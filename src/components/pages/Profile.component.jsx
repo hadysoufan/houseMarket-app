@@ -15,8 +15,6 @@ import {
 } from 'firebase/firestore';
 import { db } from '../../utils/firebase.utils';
 import { toast } from 'react-toastify';
-import ListingItem from '../ListingItem.component';
-
 
 function Profile() {
   const auth = getAuth();
@@ -155,7 +153,7 @@ function Profile() {
           <img src={arrowRight} alt="arrow right" />
         </Link>
 
-        {!loading && listings?.length > 0 && (
+        {/* {!loading && listings?.length > 0 && (
           <>
             <p className="listingText">Your Listings</p>
             <ul className="listingsList">
@@ -170,7 +168,7 @@ function Profile() {
               ))}
             </ul>
           </>
-        )}
+        )} */}
       </main>
     </div>
   );

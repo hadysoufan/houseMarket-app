@@ -9,11 +9,11 @@ function Explore() {
         <p className="pageHeader">Explore</p>
       </header>
       <main>
-        {/* Slider */}
+        {/* SLider */}
 
         <p className="exploreCategoryHeading">Categories</p>
         <div className="exploreCategories">
-          {/* rent page */}
+          {/* rent category */}
           <Link to="/category/rent">
             <img
               src={rentCategoryImage}
@@ -23,11 +23,11 @@ function Explore() {
             <p className="exploreCategoryName">Places for rent</p>
           </Link>
 
-          {/* sell page */}
-          <Link to="/category/sell">
+          {/* sell category */}
+          <Link to="/category/sale">
             <img
               src={sellCategoryImage}
-              alt="sell"
+              alt="sale"
               className="exploreCategoryImg"
             />
             <p className="exploreCategoryName">Places for sale</p>

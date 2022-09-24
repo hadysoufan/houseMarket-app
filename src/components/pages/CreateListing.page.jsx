@@ -1,21 +1,20 @@
 import { useState, useEffect, useRef } from 'react';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
+import { useNavigate } from 'react-router-dom';
+import Spinner from '../Spinner.component';
+import { toast } from 'react-toastify';
+import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid';
 import {
   getStorage,
   ref,
   uploadBytesResumable,
   getDownloadURL,
 } from 'firebase/storage';
-import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { db } from '../../utils/firebase.utils';
-import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
-import { v4 as uuidv4 } from 'uuid';
-import Spinner from '../Spinner.component';
 
 function CreateListing() {
-  // eslint-disable-next-line
-  const [geolocationEnabled, setGeolocationEnabled] = useState(false);
+  const [geolocationEnabled, setGeolocationEnable] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     type: 'rent',
@@ -96,6 +95,7 @@ function CreateListing() {
       );
 
       const data = await response.json();
+      console.log(data);
 
       geolocation.lat = data.results[0]?.geometry.location.lat ?? 0;
       geolocation.lng = data.results[0]?.geometry.location.lng ?? 0;
@@ -113,6 +113,7 @@ function CreateListing() {
     } else {
       geolocation.lat = latitude;
       geolocation.lng = longitude;
+      console.log(geolocation, location);
     }
 
     // Store image in firebase
@@ -146,8 +147,6 @@ function CreateListing() {
             reject(error);
           },
           () => {
-            // Handle successful uploads on complete
-            // For instance, get the download URL: https://firebasestorage.googleapis.com/...
             getDownloadURL(uploadTask.snapshot.ref).then(downloadURL => {
               resolve(downloadURL);
             });
@@ -164,6 +163,9 @@ function CreateListing() {
       return;
     });
 
+    console.log(imgUrls);
+
+    // save img to the db
     const formDataCopy = {
       ...formData,
       imgUrls,
@@ -218,11 +220,11 @@ function CreateListing() {
       <header>
         <p className="pageHeader">Create a Listing</p>
       </header>
-
       <main>
         <form onSubmit={onSubmit}>
           <label className="formLabel">Sell / Rent</label>
           <div className="formButtons">
+            {/* button for sale */}
             <button
               type="button"
               className={type === 'sale' ? 'formButtonActive' : 'formButton'}
@@ -232,6 +234,8 @@ function CreateListing() {
             >
               Sell
             </button>
+
+            {/* button for rent */}
             <button
               type="button"
               className={type === 'rent' ? 'formButtonActive' : 'formButton'}
@@ -255,6 +259,7 @@ function CreateListing() {
             required
           />
 
+          {/* input for bedrooms */}
           <div className="formRooms flex">
             <div>
               <label className="formLabel">Bedrooms</label>
@@ -269,6 +274,8 @@ function CreateListing() {
                 required
               />
             </div>
+
+            {/* input for bathrooms */}
             <div>
               <label className="formLabel">Bathrooms</label>
               <input
@@ -284,6 +291,7 @@ function CreateListing() {
             </div>
           </div>
 
+          {/* button for parking */}
           <label className="formLabel">Parking spot</label>
           <div className="formButtons">
             <button
@@ -310,6 +318,8 @@ function CreateListing() {
             </button>
           </div>
 
+          {/* button for furnished */}
+
           <label className="formLabel">Furnished</label>
           <div className="formButtons">
             <button
@@ -335,6 +345,8 @@ function CreateListing() {
               No
             </button>
           </div>
+
+          {/* textarea for address */}
 
           <label className="formLabel">Address</label>
           <textarea
@@ -373,6 +385,8 @@ function CreateListing() {
             </div>
           )}
 
+          {/* button for offer */}
+
           <label className="formLabel">Offer</label>
           <div className="formButtons">
             <button
@@ -397,6 +411,8 @@ function CreateListing() {
             </button>
           </div>
 
+          {/* input for regular price */}
+
           <label className="formLabel">Regular Price</label>
           <div className="formPriceDiv">
             <input
@@ -411,6 +427,8 @@ function CreateListing() {
             />
             {type === 'rent' && <p className="formPriceText">$ / Month</p>}
           </div>
+
+          {/* input for discounted price */}
 
           {offer && (
             <>
@@ -427,6 +445,8 @@ function CreateListing() {
               />
             </>
           )}
+
+          {/* input for images */}
 
           <label className="formLabel">Images</label>
           <p className="imagesInfo">
